@@ -12,7 +12,7 @@ public class PageViewCounter extends HttpServlet {
     private int pageCount = 0;
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
         String reset = req.getParameter("reset");
         resp.setContentType("text/html");
         PrintWriter out = resp.getWriter();
