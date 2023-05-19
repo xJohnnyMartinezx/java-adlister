@@ -14,11 +14,11 @@
 </div>
 
 
-<c:forEach var="park" items="${parks}">
+<c:forEach var="parks" items="${park}">
 <div class="item">
-    <h3>${park.getName()}</h3>
-    <p>${park.getLocation}</p>
-    <p>${park.getGescription}</p>
+    <h3>${parks.getName()}</h3>
+    <p>${parks.getLocation()}</p>
+    <p>${parks.getDescription()}</p>
         </c:forEach>
 
 </body>
