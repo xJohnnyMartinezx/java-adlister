@@ -8,6 +8,11 @@
 <body>
     <jsp:include page="partials/navbar.jsp" />
 
+    <form action="/logout" method="get">
+        <button type="submit">Logout</button>
+
+    </form>
+
     <div class="container">
         <h1>Viewing your profile.</h1>
     </div>
