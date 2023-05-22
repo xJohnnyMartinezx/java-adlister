@@ -17,5 +17,9 @@
         <h1>Viewing your profile.</h1>
     </div>
 
+    <div class="container">
+        <h1>Viewing ${sessionScope.username}'s Profile.</h1>
+    </div>
+
 </body>
 </html>
