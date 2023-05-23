@@ -55,15 +55,22 @@ public class MySQLAdsDao implements Ads {
         try {
             Statement stmt = connection.createStatement();
 
-            String insertQuery = String.format("INSERT INTO ads_table(title, description) VALUES('%s','%s')", title, description);
+//            String insertQuery = String.format("INSERT INTO ads_table(title, description) VALUES('%s','%s')", title, description);
+//
+//            // Will return the newly generated ID of the inserted record
+//            stmt.executeUpdate(insertQuery, Statement.RETURN_GENERATED_KEYS);
+//
+//            ResultSet rs = stmt.getGeneratedKeys();
+//            // confirm that the new record exists
+//            if(rs.next()) {
+//                System.out.println("New Record has been inserted!");
+//            }
 
-            // Will return the newly generated ID of the inserted record
-            stmt.executeUpdate(insertQuery, Statement.RETURN_GENERATED_KEYS);
-
+            String query = "INSERT INTO ads_table (title, description) VALUES('test title 1 ', 'test ad 1 desc')";
+            stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = stmt.getGeneratedKeys();
-            // confirm that the new record exists
-            if(rs.next()) {
-                System.out.println("New Record has been inserted!");
+            if (rs.next()) {
+                System.out.println("Inserted a new record! New id: " + rs.getLong(1));
             }
 
         }catch (Exception e){
