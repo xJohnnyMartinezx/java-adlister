@@ -14,7 +14,7 @@ public class MySQLParksDao implements Parks {
     public MySQLParksDao(){
         try {
             DriverManager.registerDriver(new Driver());
-            Connection connection = DriverManager.getConnection(
+            connection = DriverManager.getConnection(
                     config.getUrl(),
                     config.getUser(),
                     config.getPassword()
@@ -53,7 +53,16 @@ public class MySQLParksDao implements Parks {
         try {
             Statement stmt = connection.createStatement();
 
-           stmt.executeQuery("INSERT INTO national_parks(name, description, location) VALUES (" + name + "," + description + ","+ location + ")", Statement.RETURN_GENERATED_KEYS);
+            String insertQuery = String.format("INSERT INTO national_parks(name, description, location) VALUES('%s','%s','%s')", name, description, location);
+
+            // Will return the newly generated ID of the inserted record
+            stmt.executeUpdate(insertQuery, Statement.RETURN_GENERATED_KEYS);
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            // confirm that the new record exists
+            if(rs.next()) {
+                System.out.println("New Record has been inserted!");
+            }
         }catch (Exception e){
             throw new RuntimeException("error adding to parks db");
         }
