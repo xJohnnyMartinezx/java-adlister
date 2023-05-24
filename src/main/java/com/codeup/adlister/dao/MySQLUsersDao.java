@@ -29,7 +29,7 @@ public class MySQLUsersDao implements Users {
         try {
 
 
-            String selectUser = "SELECT * FROM users WHERE username LIKE ?";
+            String selectUser = "SELECT * FROM users WHERE username = ?";
 
             PreparedStatement stmt = connection.prepareStatement(selectUser);
             stmt.setString(1, username);
