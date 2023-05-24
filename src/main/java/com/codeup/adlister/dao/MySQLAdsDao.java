@@ -28,22 +28,21 @@ public class MySQLAdsDao implements Ads {
 
     @Override
     public List<Ad> all() {
-        Statement stmt = null;
+
         try {
-            stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM ads_table");
-            return createAdsFromResults(rs);
-//
-//            String sql = "SELECT * FROM products WHERE name LIKE ?";
-//            String searchTermWithWildcards = "%" + searchTerm + "%";
-//
-//            PreparedStatement stmt = connection.prepareStatement(sql);
-//            stmt.setString(1, searchTermWithWildcards);
-//
-//            ResultSet rs = stmt.executeQuery();
-//            while(rs.next()) {
-//                // do something with the search results
-//            }
+
+            String selectAllAds = "SELECT * FROM ads_table";
+
+            PreparedStatement stmt = connection.prepareStatement(selectAllAds);
+
+            ResultSet rs = stmt.executeQuery();
+            List<Ad> ads = new ArrayList<>();
+            while(rs.next()) {
+                // do something with the search results
+                ads.add(new Ad(rs.getLong("id"), rs.getLong("user_id"),
+                        rs.getString("title"), rs.getString("description")));
+            }
+            return ads;
 
 
         } catch (SQLException e) {
@@ -54,21 +53,23 @@ public class MySQLAdsDao implements Ads {
     @Override
     public Long insert(Ad ad) {
         try {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate(createInsertQuery(ad), Statement.RETURN_GENERATED_KEYS);
+
+            String insertAd =  "INSERT INTO ads_table(user_id, title, description) VALUES(?, ?, ?) ";
+            PreparedStatement stmt = connection.prepareStatement(insertAd, Statement.RETURN_GENERATED_KEYS);
+
+            stmt.setLong(1, ad.getUserId());
+            stmt.setString(2, ad.getTitle());
+            stmt.setString(3, ad.getDescription());
+
+
+
+            stmt.executeUpdate();
             ResultSet rs = stmt.getGeneratedKeys();
             rs.next();
             return rs.getLong(1);
         } catch (SQLException e) {
             throw new RuntimeException("Error creating a new ad.", e);
         }
-    }
-
-    private String createInsertQuery(Ad ad) {
-        return "INSERT INTO ads_table(user_id, title, description) VALUES "
-            + "(" + ad.getUserId() + ", "
-            + "'" + ad.getTitle() +"', "
-            + "'" + ad.getDescription() + "')";
     }
 
     private Ad extractAd(ResultSet rs) throws SQLException {
