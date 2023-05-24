@@ -11,11 +11,6 @@ public class ListAdsDao implements Ads {
         return ads;
     }
 
-//    @Override
-//    public void insert(String title, String description) {
-//
-//    }
-
     public Long insert(Ad ad) {
         // make sure we have ads
         if (ads == null) {

@@ -11,12 +11,12 @@ public class MySQLAdsDao implements Ads {
 
 //    ********* INSTANCES ********
     Connection connection;
-    Config config = new Config();
+//    Config config = new Config();
 
 //    ******* CONSTRUCTOR *********
 
 
-    public MySQLAdsDao() {
+    public MySQLAdsDao(Config config) {
         try {
             DriverManager.registerDriver(new Driver());
             connection = DriverManager.getConnection(
@@ -40,7 +40,7 @@ public class MySQLAdsDao implements Ads {
             List<Ad> ads = new ArrayList<>();
 
             while (rs.next()){
-                ads.add(new Ad(rs.getLong("id"), rs.getString("title"), rs.getString("description")));
+                ads.add(new Ad(rs.getLong("id"), rs.getLong("user_id"), rs.getString("title"), rs.getString("description")));
             }
 
             return ads;
@@ -51,9 +51,11 @@ public class MySQLAdsDao implements Ads {
     }
 
     @Override
-    public void insert(String title, String description) {
+    public Long insert(Ad ad) {
+
+//        Long newAdId = 0L;
         try {
-            Statement stmt = connection.createStatement();
+
 
 //            String insertQuery = String.format("INSERT INTO ads_table(title, description) VALUES('%s','%s')", title, description);
 //
@@ -66,16 +68,32 @@ public class MySQLAdsDao implements Ads {
 //                System.out.println("New Record has been inserted!");
 //            }
 
-            String query = "INSERT INTO ads_table (title, description) VALUES('test title 1 ', 'test ad 1 desc')";
-            stmt.executeUpdate(query, Statement.RETURN_GENERATED_KEYS);
+//            Long id = ad.getUserId();
+//            String title = ad.getTitle();
+//            String desc = ad.getDescription();
+
+//            String query = "INSERT INTO ads_table (user_id, title, description) VALUES(id, 'test title 1 ', 'test ad 1 desc')";
+//            String insertQuery = String.format("INSERT INTO ads_table(title, description) VALUES('%d','%s','%s')", id, title, desc);
+
+            Statement stmt = connection.createStatement();
+            Long id = ad.getUserId();
+            String title = ad.getTitle();
+            String desc = ad.getDescription();
+
+            String insertQuery = String.format("INSERT INTO ads_table(user_id, title, description) VALUES('%s','%s','%s')", id, title, desc);
+
+            stmt.executeUpdate(insertQuery, Statement.RETURN_GENERATED_KEYS);
             ResultSet rs = stmt.getGeneratedKeys();
             if (rs.next()) {
                 System.out.println("Inserted a new record! New id: " + rs.getLong(1));
+//                newAdId = rs.getLong(1);
             }
+            return rs.getLong(1);
 
         }catch (Exception e){
             throw new RuntimeException("Error inserting new Ad.");
         }
+
     }
 
 //    @Override
