@@ -31,8 +31,21 @@ public class MySQLAdsDao implements Ads {
         Statement stmt = null;
         try {
             stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM ads");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM ads_table");
             return createAdsFromResults(rs);
+//
+//            String sql = "SELECT * FROM products WHERE name LIKE ?";
+//            String searchTermWithWildcards = "%" + searchTerm + "%";
+//
+//            PreparedStatement stmt = connection.prepareStatement(sql);
+//            stmt.setString(1, searchTermWithWildcards);
+//
+//            ResultSet rs = stmt.executeQuery();
+//            while(rs.next()) {
+//                // do something with the search results
+//            }
+
+
         } catch (SQLException e) {
             throw new RuntimeException("Error retrieving all ads.", e);
         }
@@ -52,7 +65,7 @@ public class MySQLAdsDao implements Ads {
     }
 
     private String createInsertQuery(Ad ad) {
-        return "INSERT INTO ads(user_id, title, description) VALUES "
+        return "INSERT INTO ads_table(user_id, title, description) VALUES "
             + "(" + ad.getUserId() + ", "
             + "'" + ad.getTitle() +"', "
             + "'" + ad.getDescription() + "')";
