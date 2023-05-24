@@ -18,7 +18,7 @@
 //        String adTitle = req.getParameter("title");
 //        String adDescription = req.getParameter("description");
 //
-//        DaoFactory.getAdsDao().insert(adTitle, adDescription);
+//        doa.DaoFactory.getAdsDao().insert(adTitle, adDescription);
 //        resp.sendRedirect("/ads");
 //    }
 //}

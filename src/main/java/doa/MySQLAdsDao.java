@@ -1,4 +1,7 @@
+package doa;
+
 import com.mysql.cj.jdbc.Driver;
+import models.Ad;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -11,7 +14,7 @@ public class MySQLAdsDao implements Ads {
 
 //    ********* INSTANCES ********
     Connection connection;
-//    Config config = new Config();
+//    doa.Config config = new doa.Config();
 
 //    ******* CONSTRUCTOR *********
 
@@ -29,7 +32,7 @@ public class MySQLAdsDao implements Ads {
         }
     }
 
-//    ***** USING all() METHOD FROM Ads INTERFACE *******
+//    ***** USING all() METHOD FROM doa.Ads INTERFACE *******
     public List<Ad> all(){
         try {
             Statement stmt = connection.createStatement();
@@ -91,13 +94,13 @@ public class MySQLAdsDao implements Ads {
             return rs.getLong(1);
 
         }catch (Exception e){
-            throw new RuntimeException("Error inserting new Ad.");
+            throw new RuntimeException("Error inserting new models.Ad.");
         }
 
     }
 
 //    @Override
-//    public Long insert(Ad ad) {
+//    public Long insert(models.Ad ad) {
 //        return ad.getId();
 //    }
 }

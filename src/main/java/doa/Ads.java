@@ -1,3 +1,7 @@
+package doa;
+
+import models.Ad;
+
 import java.util.List;
 
 public interface Ads {
