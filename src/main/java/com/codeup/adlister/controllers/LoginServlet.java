@@ -2,6 +2,7 @@ package com.codeup.adlister.controllers;
 
 import com.codeup.adlister.dao.DaoFactory;
 import com.codeup.adlister.models.User;
+import org.mindrot.jbcrypt.BCrypt;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -29,14 +30,19 @@ public class LoginServlet extends HttpServlet {
         // TODO: check the submitted password against what you have in your database
         boolean validAttempt = false;
 
+
         User userSearch = DaoFactory.getUsersDao().findByUsername(username);
+        String hashedPassword = userSearch.getPassword();
 
-        if (userSearch != null) {
-            if (userSearch.getPassword().equals(password)){
+        boolean passwordsMatch = BCrypt.checkpw(password, hashedPassword);
+
+        if (passwordsMatch) {
                 validAttempt = true;
-            }
-        };
-
+            System.out.println("Successful user login");
+        }else {
+            System.out.println("No user found or password mismatch");
+            response.sendRedirect("/login");
+        }
 
         if (validAttempt) {
             // TODO: store the logged in user object in the session, instead of just the username
