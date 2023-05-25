@@ -25,16 +25,23 @@ public class RegisterServlet extends HttpServlet {
         // TODO: ensure the submitted information is valid
         // TODO: create a new user based off of the submitted information
         // TODO: if a user was successfully created, send them to their profile
+        String username = request.getParameter("username");
+        String email = request.getParameter("email");
+        String password = request.getParameter("password");
 
-        User newUser = new User(
-                request.getParameter("username"),
-                request.getParameter("email"),
-                request.getParameter("password")
-        );
+        if (username != null && email != null && password != null) {
 
-        DaoFactory.getUsersDao().insert(newUser);
+            User newUser = new User();
+                    newUser.setUsername(username);
+                    newUser.setEmail(email);
+                    newUser.setPassword(password);
 
-        request.getSession().setAttribute("user", newUser);
-        response.sendRedirect("/profile");
+
+            DaoFactory.getUsersDao().insert(newUser);
+            response.sendRedirect("/profile");
+        }else {
+            response.sendRedirect("/register");
+        }
+
     }
 }
