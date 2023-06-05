@@ -10,6 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import static com.codeup.adlister.util.Password.isValidPassword;
 
 @WebServlet(name = "controllers.RegisterServlet", urlPatterns = "/register")
 public class RegisterServlet extends HttpServlet {
@@ -27,24 +31,33 @@ public class RegisterServlet extends HttpServlet {
         boolean inputHasErrors = username.isEmpty()
             || email.isEmpty()
             || password.isEmpty()
-            || (! password.equals(passwordConfirmation));
+            || (!password.equals(passwordConfirmation));
 
-        if (inputHasErrors) {
-            response.sendRedirect("/register");
-            return;
-        }
-//        else if (email.equalsIgnoreCase(DaoFactory.getUsersDao().findByUsername(username).getEmail())){
-//            System.out.println("Email already exists!");
-//            response.sendRedirect("/register");
-//        }
 
-        String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
-
+//        USING isValidPassword() METHOD IMPORTED FORM Password CLASS AND PASSING IN OUR password VAR FROM ABOVE
+        if (isValidPassword(password)){
+//            inputHasErrors IS TRUE
+//            THEN REDIRECT BACK TO THE REGISTER PAGE.
+            if (inputHasErrors) {
+                System.out.println("Registration Unsuccessful: One or more values are empty!");
+                response.sendRedirect("/register");
+                return;
+            }
+//            IF PASSWORD MEETS CRITERIA THEN
+//            HASH IT, CREATE A NEW USER, AND REDIRECT TO LOGIN.
+            System.out.println("password is valid");
+            String hashedPassword = BCrypt.hashpw(password, BCrypt.gensalt());
             // create and save a new user
             User user = new User(username, email, hashedPassword);
             DaoFactory.getUsersDao().insert(user);
             response.sendRedirect("/login");
-        System.out.println("Successful user registration");
+            System.out.println("Successful user registration");
+        }else {
+//            IF PASSWORD DOES NOT MEET THE CRITERIA.
+            System.out.println("pw not valid");
+
+        }
+
 
     }
 }
